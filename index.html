@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Car Game</title>
+
+        <style>
+
+            *{ margin: 0; padding: 0; }
+
+            .hide{
+                display: none;
+            }
+
+            .car{
+                width: 50px;
+                height: 70px;
+                background-color: red;
+                position: absolute;
+                bottom: 40px;
+                /* left: 350px; */
+
+            }
+
+.gamearea{
+    width: 400px;
+    height: 100vh;
+    background-color: #2d3436;
+    margin: auto;
+    position: relative;
+    overflow: hidden;
+}
+
+.lines{
+    width: 10px;
+    height: 100px;
+    background: white;
+    position: absolute;
+    margin-left: 195px;
+}
+
+        </style>
+
+    </head>
+
+    <body>
+
+        <div class="cargame">
+            <div class="score"></div>
+            <div class="startscreen">
+                <p>
+                    Press here to Start <br>
+                    Arrow keys to Move <br>
+                    If you hit another car you will lose.
+                </p>
+            </div>
+            <div class="gamearea hide">Hello</div>
+        </div>
+
+        <script> 
+        
+        const score = document.querySelector('.score');
+        const startScreen = document.querySelector('.startscreen');
+        const gameArea = document.querySelector('.gamearea');
+        
+        console.log(score);
+        console.log(startScreen);        
+        console.log(gameArea);
+
+startScreen.addEventListener('click', start)
+
+let player = {speed:5};
+
+        let keys = {ArrowUp:false, ArrowDown:false, ArrowLeft:false, ArrowRight:false}
+
+        document.addEventListener("keydown", keyDown);
+        document.addEventListener("keyup", keyUp);
+
+function keyDown(e) {
+ e.preventDefault();
+ keys[e.key]= true;
+//  console.log(e.key);   
+console.log(keys)
+}
+
+function keyUp(e) {
+ e.preventDefault();
+ keys[e.key]= false;
+//  console.log(e.key);
+ console.log(keys);    
+}
+
+function gamePlay() {
+    console.log("Hey! Iam clicked");
+
+    let car = document.querySelector('.car');
+let road = gameArea.getBoundingClientRect()
+console.log(road);
+
+if (player.start) {
+
+    if (keys.ArrowUp && player.y > (road.top + 80) ) {player.y -= player.speed}
+    if (keys.ArrowDown && player.y < (road.bottom - 75)) {player.y += player.speed}
+    if (keys.ArrowLeft && player.x>0) {player.x -= player.speed}
+    if (keys.ArrowRight && player.x < (road.width - 50)) {player.x += player.speed}
+
+car.style.top = player.y + "px";
+car.style.left = player.x + "px";
+
+    window.requestAnimationFrame(gamePlay);
+}
+}
+
+function start() {
+
+gameArea.classList.remove('hide')
+startScreen.classList.add('hide')
+
+    player.start = true;
+    window.requestAnimationFrame(gamePlay);
+
+    for (let x = 0; x < 5; x++) {
+       
+    let roadLine = document.createElement('div');
+    roadLine.setAttribute('class','lines');
+    roadLine.style.top = (x*150) + "px";
+    gameArea.appendChild(roadLine);
+
+    }
+    
+let car = document.createElement('div');
+car.setAttribute('class','car');
+// car.innerText = "Hi I am ur car";
+gameArea.appendChild(car)
+
+player.x=car.offsetLeft;
+player.y=car.offsetTop;
+
+console.log("Top Position" +" "+ car.offsetTop)
+console.log("Left Position" +" "+ car.offsetLeft)
+
+}
+
+
+
+
+
+        </script>
+
+    </body>
+</html>
